@@ -32,4 +32,4 @@ class UserTests(TestCase):
         request = factory.get('/users/')
 
         response = UserViewList.as_view()(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
