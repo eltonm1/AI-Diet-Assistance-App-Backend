@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'user_manager'
+    'user_manager',
+    'food_products',
 ]
 
 AUTH_USER_MODEL = 'user_manager.User'

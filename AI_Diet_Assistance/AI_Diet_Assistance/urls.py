@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from rest_framework.authtoken import views
 from rest_framework import routers
 from user_manager.views import UserViewList, UserView, CreateUser, ProfilePicUploadView
+from food_products.views import FoodProductsViewList
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -31,6 +32,7 @@ urlpatterns = [
     path('api/userprofile/', UserView.as_view()),
     path('api/users/create/', CreateUser.as_view()),
     path('api/users/', UserViewList.as_view()),
+    path('api/foodproducts/', FoodProductsViewList.as_view()),
     #path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
