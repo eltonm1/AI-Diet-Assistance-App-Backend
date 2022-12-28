@@ -1,7 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from .models import FoodProduct
 from .serializer import FoodProductsSerializer, FoodProductsPostSerializer
 # Create your views here.
@@ -11,13 +10,13 @@ class FoodProductsViewList(APIView):
     # permission_classes = [HasGroupPermission]
     # permission_classes = [IsAdminUser]
     def get(self, request):
-        mahjongSessions = FoodProduct.objects.all().order_by('name')
+        foodProducts = FoodProduct.objects.all().order_by('name')
         serializer_context = {
             'request': request,
         }
-        mahjongSessions = FoodProductsSerializer(mahjongSessions, context=serializer_context, many=True)
-        # print(mahjongSessions.data)
-        return Response(mahjongSessions.data)
+        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
+
+        return Response(foodProducts.data)
         
     def post(self, request):
         print(request.data)

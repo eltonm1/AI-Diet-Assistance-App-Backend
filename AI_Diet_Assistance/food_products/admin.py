@@ -1,7 +1,17 @@
 from django.contrib import admin
 from .models import FoodProduct, ProductPrice, NutritionInformation
+
 # Register your models here.
 
-admin.site.register(FoodProduct)
+class CustomFoodProductAdmin(admin.ModelAdmin):
+    # ...
+    ordering = ('name', '-created')
+    list_display = ('name', 'brand', 'manufacturer', 'created')
+    search_fields = ('name', 'created')
+    filter_horizontal = ()
+    list_filter = ('brand', 'manufacturer')
+    fieldsets = ()
+
+admin.site.register(FoodProduct, CustomFoodProductAdmin)
 admin.site.register(ProductPrice)
 admin.site.register(NutritionInformation)

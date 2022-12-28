@@ -11,7 +11,7 @@ class NutritionInformationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductPriceSerializer(serializers.ModelSerializer):
-    date = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%SZ")
+    date = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%SZ", required=False)
 
     class Meta:
         model = ProductPrice

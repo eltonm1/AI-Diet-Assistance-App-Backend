@@ -145,3 +145,20 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
+
+CELERY_BEAT_SCHEDULE = {
+      'add-every-10-seconds': {
+        'task': 'food_products.tasks.add',
+        'schedule': 3.0,
+        'args': (16, 16),
+        'options': {
+            'expires': 15.0,
+        },
+    },
+}
