@@ -10,6 +10,15 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email', 'first_name')
     filter_horizontal = ()
     list_filter = ('groups',)
-    fieldsets = ()
 
+    fieldsets = (None)
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'date_of_birth', 
+                    'password1', 'password2',
+                    'first_name', 'last_name'),
+        }),
+    )
+   
 admin.site.register(User, CustomUserAdmin)
