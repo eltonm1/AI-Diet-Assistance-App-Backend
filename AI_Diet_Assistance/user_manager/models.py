@@ -48,6 +48,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=False)
     date_of_birth = models.DateField(default=None, blank=False)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=False)
+    user_avatar = models.ImageField(upload_to="profile_pic", blank=True)
     REQUIRED_FIELDS = ['first_name', 'last_name', "date_of_birth", "gender"]
     USERNAME_FIELD = 'email'
 
