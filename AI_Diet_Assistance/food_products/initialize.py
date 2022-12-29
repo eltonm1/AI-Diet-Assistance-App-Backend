@@ -29,7 +29,7 @@ def initialize():
     for index, row in price_watch_data.iterrows():
         product_name = row['Product Name']
         price_watch_code = row['Product Code']
-        barcode = code_mapping.get(price_watch_code)
+        barcode = code_mapping.get(price_watch_code, "")
         category_1 = row['Category 1']
         category_2 = row['Category 2']
         category_3 = row['Category 3']
