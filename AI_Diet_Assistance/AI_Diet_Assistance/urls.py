@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/users/create/', CreateUser.as_view()),
     path('api/users/', UserViewList.as_view()),
     path('api/foodproducts/', FoodProductsViewList.as_view()),
+    path('api/foodproducts/<str:pk>', FoodProductsViewList.as_view()),
     #path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

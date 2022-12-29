@@ -68,10 +68,22 @@ class FoodProductsPostSerializer(serializers.ModelSerializer):
         
         instance = FoodProduct.objects.create(**validated_data)
         instance.product_price.set(product_price_save)
-        
+
         if nutrition is not None:
             nutrition = NutritionInformation.objects.create(**nutrition)
             instance.nutrition = nutrition
 
         instance.save()
-        return instance            
+        return instance 
+
+    def update(self, instance, validated_data):
+        nutrition = validated_data.pop('nutrition')
+        print("**********")
+        print(validated_data)
+        print("**********")
+        if nutrition is not None:
+            nutrition = NutritionInformation.objects.create(**nutrition)
+            instance.nutrition = nutrition
+
+        instance.save()
+        return instance          
