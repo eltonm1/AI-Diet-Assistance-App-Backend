@@ -1,6 +1,6 @@
 from django.db import models
 from user_manager import models as user_models
-from datetime import datetime
+from django.utils import timezone
 import uuid
 # Create your models here.
 
@@ -33,7 +33,7 @@ class ProductPrice(models.Model):
     )
     price = models.FloatField(blank=False)
     supermarket = models.CharField(max_length=10, blank=False, choices=SUPERMARKET_CHOICES, default='1Wellcome')
-    date = models.DateTimeField(default=datetime.now)
+    date = models.DateTimeField(default=timezone.now)
 
 class FoodProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
@@ -44,7 +44,7 @@ class FoodProduct(models.Model):
     category_3 = models.CharField(max_length=100, blank=False, null=True)
     barcode = models.CharField(max_length=300, blank=True)
     pricewatchcode = models.CharField(max_length=16, blank=True)
-    created = models.DateTimeField(default=datetime.now)
+    created = models.DateTimeField(default=timezone.now)
     nutrition = models.ForeignKey(NutritionInformation, on_delete=models.CASCADE, null=True, blank=True)
     manufacturer = models.CharField(max_length=200, blank=True)
     brand = models.CharField(max_length=200, blank=True)
