@@ -43,7 +43,7 @@ class FoodProduct(models.Model):
     category_2 = models.CharField(max_length=100, blank=False, null=True)
     category_3 = models.CharField(max_length=100, blank=False, null=True)
     barcode = models.CharField(max_length=300, blank=True)
-    pricewatchcode = models.CharField(max_length=16, blank=True)
+    pricewatchcode = models.CharField(max_length=16, blank=True, unique=True)
     created = models.DateTimeField(default=timezone.now)
     nutrition = models.ForeignKey(NutritionInformation, on_delete=models.CASCADE, null=True, blank=True)
     manufacturer = models.CharField(max_length=200, blank=True)
