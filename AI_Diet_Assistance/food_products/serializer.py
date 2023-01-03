@@ -31,6 +31,9 @@ class FoodProductsSerializer(serializers.ModelSerializer):
                     'brand',
                     'product_price',
                     'nutrition',
+                    'category_1',
+                    'category_2',
+                    'category_3'
                  ]
 
     def to_representation(self, instance):
