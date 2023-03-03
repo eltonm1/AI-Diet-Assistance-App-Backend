@@ -49,3 +49,6 @@ class FoodProduct(models.Model):
     manufacturer = models.CharField(max_length=200, blank=True)
     brand = models.CharField(max_length=200, blank=True)
     product_price = models.ManyToManyField(ProductPrice, blank=True)
+
+    def latest_pricing(self):
+        return self.product_price.order_by("-date")[:10]
