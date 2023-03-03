@@ -11,24 +11,33 @@ from django.views.decorators.cache import cache_page
 class FoodProductsViewList(APIView):
     # permission_classes = [HasGroupPermission]
     # permission_classes = [IsAdminUser]
+    # @method_decorator(cache_page(10*1))
+    # def get(self, request):
+    #     foodProducts = FoodProduct.objects.all().order_by('name')
+    #     serializer_context = {
+    #         'request': request,
+    #     }
+    #     foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
+
+    #     return Response(foodProducts.data)
     @method_decorator(cache_page(10*1))
-    def get(self, request):
-        foodProducts = FoodProduct.objects.all().order_by('name')
-        serializer_context = {
-            'request': request,
-        }
-        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
+    def get(self, request, bcode=None):
+        if bcode is None:
+            foodProducts = FoodProduct.objects.all().order_by('name')
+            serializer_context = {
+                'request': request,
+            }
+            foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
 
-        return Response(foodProducts.data)
-    
-    def get(self, request, bcode):
-        foodProducts = FoodProduct.objects.get(barcode=bcode)
-        serializer_context = {
-            'request': request,
-        }
-        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=False)
+            return Response(foodProducts.data)
+        else:
+            foodProducts = FoodProduct.objects.get(barcode=bcode)
+            serializer_context = {
+                'request': request,
+            }
+            foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=False)
 
-        return Response(foodProducts.data)
+            return Response(foodProducts.data)
         
     def post(self, request):
         print(request.data)
