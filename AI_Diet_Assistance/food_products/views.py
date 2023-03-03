@@ -20,6 +20,15 @@ class FoodProductsViewList(APIView):
         foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
 
         return Response(foodProducts.data)
+    
+    def get(self, request, bcode):
+        foodProducts = FoodProduct.objects.get(barcode=bcode)
+        serializer_context = {
+            'request': request,
+        }
+        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=False)
+
+        return Response(foodProducts.data)
         
     def post(self, request):
         print(request.data)
