@@ -9,6 +9,7 @@ from django.views.decorators.cache import cache_page
 from django.db.models import Prefetch
 from datetime import datetime, timedelta
 import pytz
+from django.contrib.postgres.search import SearchVector
 
 class FoodProductsViewList(APIView):
     # permission_classes = [HasGroupPermission]
@@ -24,8 +25,8 @@ class FoodProductsViewList(APIView):
     #     return Response(foodProducts.data)
     @method_decorator(cache_page(10*1))
     def get(self, request, bcode=None):
+        timelimit = datetime.now(pytz.UTC) - timedelta(days=5)
         if bcode is None:
-            timelimit = datetime.now(pytz.UTC) - timedelta(days=5)
             prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
             foodProducts = FoodProduct.objects.prefetch_related(prefetch).order_by('name').all()
             serializer_context = {
@@ -64,3 +65,17 @@ class FoodProductsViewList(APIView):
             return Response(FoodProductsSerializer(food_product, many=False, context={"request": request}).data)#serializer.data)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FoodProductsSearchViewList(APIView):
+
+    def get(self, request, query):
+        timelimit = datetime.now(pytz.UTC) - timedelta(days=5)
+        prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
+        foodProducts = FoodProduct.objects.annotate(search=SearchVector('name', 'brand')).filter(search=query).prefetch_related(prefetch)
+        serializer_context = {
+            'request': request,
+        }
+        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
+
+        return Response(foodProducts.data)

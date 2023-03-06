@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from rest_framework.authtoken import views
 from rest_framework import routers
 from user_manager.views import UserViewList, UserView, CreateUser, ProfilePicUploadView
-from food_products.views import FoodProductsViewList
+from food_products.views import FoodProductsViewList, FoodProductsSearchViewList
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -34,9 +34,11 @@ urlpatterns = [
     path('api/users/', UserViewList.as_view()),
     path('api/foodproducts/', FoodProductsViewList.as_view()),
     path('api/foodproducts/<str:bcode>', FoodProductsViewList.as_view()),
+    path('api/foodproducts/search/<str:query>', FoodProductsSearchViewList.as_view()),
     #path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin/', admin.site.urls),
+    # path('__debug__/', include('debug_toolbar.urls')),
     re_path(r'^upload/(?P<filename>[^/]+)$', ProfilePicUploadView.as_view()),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
