@@ -1,12 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import FoodProduct
+from .models import FoodProduct, ProductPrice
 from .serializer import FoodProductsSerializer, FoodProductsPostSerializer
 # Create your views here.
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-
+from django.db.models import Prefetch
+from datetime import datetime, timedelta
+import pytz
 
 class FoodProductsViewList(APIView):
     # permission_classes = [HasGroupPermission]
@@ -23,7 +25,9 @@ class FoodProductsViewList(APIView):
     @method_decorator(cache_page(10*1))
     def get(self, request, bcode=None):
         if bcode is None:
-            foodProducts = FoodProduct.objects.all().order_by('name')
+            timelimit = datetime.now(pytz.UTC) - timedelta(days=5)
+            prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
+            foodProducts = FoodProduct.objects.prefetch_related(prefetch).order_by('name').all()
             serializer_context = {
                 'request': request,
             }

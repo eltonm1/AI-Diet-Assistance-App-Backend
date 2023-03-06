@@ -11,6 +11,8 @@ class CustomFoodProductAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     list_filter = ('brand', 'manufacturer')
     fieldsets = ()
+    raw_id_fields = ("product_price",)
+
 
 admin.site.register(FoodProduct, CustomFoodProductAdmin)
 admin.site.register(ProductPrice)
