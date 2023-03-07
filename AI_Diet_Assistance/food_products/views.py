@@ -87,15 +87,16 @@ class FoodProductsSearchViewList(APIView):
 class FoodProductsPkeyViewList(APIView):
 
     def get(self, request, id, days=None):
+        id = id.split('&')
         if days is None:
-            foodProducts = FoodProduct.objects.get(id=id)
+            foodProducts = FoodProduct.objects.filter(id__in=id)
         else:
             timelimit = datetime.now(pytz.UTC) - timedelta(days=days)
             prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
-            foodProducts = FoodProduct.objects.prefetch_related(prefetch).get(id=id)
+            foodProducts = FoodProduct.objects.filter(id__in=id).prefetch_related(prefetch)
         serializer_context = {
             'request': request,
         }
-        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=False)
+        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
 
         return Response(foodProducts.data)
