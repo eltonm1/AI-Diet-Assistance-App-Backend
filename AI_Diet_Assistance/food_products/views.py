@@ -69,10 +69,14 @@ class FoodProductsViewList(APIView):
 
 class FoodProductsSearchViewList(APIView):
 
-    def get(self, request, query):
-        timelimit = datetime.now(pytz.UTC) - timedelta(days=5)
-        prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
-        foodProducts = FoodProduct.objects.annotate(search=SearchVector('name', 'brand')).filter(search=query).prefetch_related(prefetch)
+    def get(self, request, query, days=None):
+        if days is None:
+            prefetch = Prefetch("product_price", queryset=ProductPrice.objects.order_by('-date'))
+            foodProducts = FoodProduct.objects.annotate(search=SearchVector('name', 'brand')).filter(search=query)
+        else:
+            timelimit = datetime.now(pytz.UTC) - timedelta(days=days)
+            prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
+            foodProducts = FoodProduct.objects.annotate(search=SearchVector('name', 'brand')).filter(search=query).prefetch_related(prefetch)
         serializer_context = {
             'request': request,
         }

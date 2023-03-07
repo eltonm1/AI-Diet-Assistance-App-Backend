@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/foodproducts/', FoodProductsViewList.as_view()),
     path('api/foodproducts/<str:bcode>', FoodProductsViewList.as_view()),
     path('api/foodproducts/search/<str:query>', FoodProductsSearchViewList.as_view()),
+    path('api/foodproducts/search/<str:query>/<int:days>', FoodProductsSearchViewList.as_view()),
     path('api/foodproducts/pkey/<str:id>', FoodProductsPkeyViewList.as_view()),
     path('api/foodproducts/pkey/<str:id>/<int:days>', FoodProductsPkeyViewList.as_view()),
     #path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
