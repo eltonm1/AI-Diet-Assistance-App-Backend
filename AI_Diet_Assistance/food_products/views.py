@@ -10,6 +10,7 @@ from django.db.models import Prefetch
 from datetime import datetime, timedelta
 import pytz
 from django.contrib.postgres.search import SearchVector
+import pickle
 
 class FoodProductsViewList(APIView):
     # permission_classes = [HasGroupPermission]
@@ -100,3 +101,32 @@ class FoodProductsPkeyViewList(APIView):
         foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
 
         return Response(foodProducts.data)
+    
+product_simil = pickle.load(open("food_products/product_similarity.pickle", "rb"))
+class FoodProductsSimilarityViewList(APIView):
+    def find_similar_product(self, ids):
+        sim_prod_ids = set()
+        for id in ids:
+            sim_products_tuple = product_simil.get(id)
+            if sim_products_tuple:
+                sim_products_tuple = sim_products_tuple[:10]
+                sim_products_id = [id for _, id in sim_products_tuple]
+                sim_prod_ids.update(sim_products_id)
+        return list(sim_prod_ids)
+    
+    def get(self, request, id, days=None):
+        id = id.split('&')
+        id = self.find_similar_product(id)
+        if days is None:
+            foodProducts = FoodProduct.objects.filter(id__in=id)
+        else:
+            timelimit = datetime.now(pytz.UTC) - timedelta(days=days)
+            prefetch = Prefetch("product_price", queryset=ProductPrice.objects.filter(date__gte=timelimit).order_by('-date'))
+            foodProducts = FoodProduct.objects.filter(id__in=id).prefetch_related(prefetch)
+        serializer_context = {
+            'request': request,
+        }
+        foodProducts = FoodProductsSerializer(foodProducts, context=serializer_context, many=True)
+
+        return Response(foodProducts.data)
+
