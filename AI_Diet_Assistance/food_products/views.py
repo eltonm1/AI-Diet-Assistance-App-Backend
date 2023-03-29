@@ -56,9 +56,9 @@ class FoodProductsViewList(APIView):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk):
+    def put(self, request, bcode):
         print(request.data)
-        food_product = FoodProduct.objects.get(id=pk)
+        food_product = FoodProduct.objects.get(barcode=bcode)
         serializer = FoodProductsPostSerializer(instance=food_product, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=False):
             serializer.save()
